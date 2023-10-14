@@ -1,0 +1,121 @@
+import java.io.File; 
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    try {  
+      // Read words
+      File wordsFile = new File("words.txt");
+      Scanner fileReader = new Scanner(wordsFile);  
+      String[] words = new String[279496];  
+
+      // Store words into array
+      while(fileReader.hasNextLine()) {  
+        for(int i = 0; i < 279496; i++){
+          words[i] = fileReader.nextLine();
+        }
+      }
+
+      // Store user input
+      Scanner input = new Scanner(System.in);
+      int players; 
+      String name;
+  
+      System.out.println("Enter the number of players: ");
+      players = input.nextInt();
+      System.out.println("Enter the names of the players");
+  
+      // Instantiate player objects
+      Player [] player = new Player[players + 1];
+  
+      for(int i = 0; i <= players; i++) {
+        name = input.nextLine();
+        player[i] = new Player(name);
+      }
+  
+      // Game begins
+      String letters = "", userLetter = "";
+      while(true) {
+        // Current user enters a letter
+        for(int i = 1; i <= players; i++) {
+          System.out.println(player[i].toString() + ", it's your turn. The letters are " + letters + ". Enter a letter or enter * to challenge.");
+          userLetter = input.nextLine();
+          
+          // If the user challenges the last player who entered a letter
+          if(userLetter.equals("*")) {
+            // loop through each word in the text array
+            for(int s = 0; s < 279496; s++) {
+              // if the current word length is less than the letters length, skip iteration
+              if(words[s].length() < letters.length()) {
+                continue;
+              }
+              // else represent the substring of that word as a variable
+              String wordSubstring = words[s].substring(0, letters.length());
+              // if that substring is part of a word then the current player loses
+              if(letters.equals(wordSubstring)) {
+                player[i].loseRound();
+                break;
+              }
+            }
+          } else if(letters.equals(wordSubstring) == false) {
+            if(i == players) {
+              player[1].loseRound();
+              break;
+            }
+            if(i == 1) {
+              player[players].loseRound();
+              break;
+            }
+            
+            
+            
+
+              
+          letters += userLetter;
+          
+          // If the user creates a word after entering a letter
+          for(int j = 0; j < 279496; j++) {
+            if(letters.equals(words[j])) {
+              System.out.print("Match");
+              player[i].loseRound();
+            }
+          }
+          
+
+
+          
+        }
+      }
+        
+  
+  
+  
+    
+    
+    
+    
+
+  
+    
+
+    
+    
+    
+
+
+
+
+
+
+
+
+
+       
+    } catch (FileNotFoundException e) {
+      System.out.println("An error occured.");
+      e.printStackTrace();
+    }
+    
+  }
+}
